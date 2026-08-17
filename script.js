@@ -2,6 +2,7 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySA8sH1o7E1dXN0ZiQf0_YyIbYsmkZiuWypbo6gWGt1RHj1Owfi7fytXkoZktn6aE/exec';
 
 const registeredPassword = [
+    "Genesis",
     "Favour01",
     "Oladele",
     "Ayodamola04",
