@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEVEL-UP BOOTCAMP — Growth Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./style2.css">
+</head>
+<body>
+
+<div id="hero" class="hero" hidden>
+  <div class="hero-inner">
+    <div class="eyebrow"><span class="dot"></span> LEVEL-UP BOOTCAMP</div>
+    <div class="pillar-tag"><span class="swatch" id="pillarSwatch"></span><span id="pillarSection"></span></div>
+    <h1 class="headline display" id="pillarLabel"></h1>
+    <p class="tagline" id="pillarTagline"></p>
+    <p class="weak-note">This pillar was <b>selected</b> in your assessment. Below are 7 starter habits to strengthen it, edit any line, remove what doesn't fit, or add your own.</p>
+    <button class="change-pillar" id="changePillar">Not the right pillar? Choose a different one</button>
+    <br>
+    <br>
+    <button class="btn btn-ghost" id="retake">Retake Assessment</button>
+  </div>
+</div>
+
+<div id="picker" class="picker-wrap" hidden>
+  <div style="height:36px"></div>
+  <p class="picker-note">Select a pillar to generate Growth Plan. Pick one below to preview its growth plan.</p>
+  <div class="picker-grid" id="pickerGrid"></div>
+</div>
+
+<div id="main" class="main" hidden>
+  <div class="section-label">transformative habits</div>
+  <ul class="stairs" id="stairs"></ul>
+  <button class="add-step" id="addHabit">+ Add a custom habit</button>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="savePlan">Save plan</button>
+    <button class="btn btn-ghost" id="resetPlan">Reset to defaults</button>
+    <span class="save-flash" id="saveFlash">✓ Saved</span>
+  </div>
+
+  <p class="footer-note">Tap a step number to mark a habit as this week's focus. Saved plans persist on this browser.</p>
+</div>
+
+<script>
+(function(){
+
+  const PILLARS = {
+    spiritual: {
+      section: "Root", label: "Spiritual", accent: "#3FA66C",
+      tagline: "The root that feeds everything else; your walk with God, prayer life, and discernment.",
+      habits: [
+        "Start the day with 10 minutes of prayer before checking your phone",
+        "Read one chapter of scripture and journal one takeaway",
+        "Fast one meal a week to sharpen discernment",
+        "Memorize one verse every week",
+        "Attend the Genesis Circle devotional check-in daily",
+        "Practice 5 minutes of silence before bed to listen",
+        "Confess one area of struggle to an accountability partner weekly"
+      ]
+    },
+    purpose: {
+      section: "Trunk", label: "Purpose & Productivity", accent: "#25517E",
+      tagline: "The trunk that carries your growth upward, clarity of purpose and consistent execution.",
+      habits: [
+        "Write tomorrow's top 3 priorities before ending today",
+        "Time-block your first productive hour, no phone",
+        "Review your 90-day goal every Sunday",
+        "Say no to one low-value request this week",
+        "Track hours spent versus hours planned daily",
+        "End each day with a 5-minute win log",
+        "Batch admin tasks into one weekly block"
+      ]
+    },
+    mental: {
+      section: "Branch", label: "Mental", accent: "#C79A4B",
+      tagline: "Sharpening how you think, focus, and learn.",
+      habits: [
+        "Read 15 pages of a growth book daily",
+        "Do one deep-focus 90-minute session daily, no notifications",
+        "Journal one lesson learned each evening",
+        "Learn one new concept outside your field weekly",
+        "Take a 20-minute walk without your phone",
+        "Solve one puzzle or brain exercise daily",
+        "Limit passive scrolling to 30 minutes a day"
+      ]
+    },
+    emotional: {
+      section: "Branch", label: "Emotional", accent: "#B9412E",
+      tagline: "Building self-awareness, regulation, and resilience.",
+      habits: [
+        "Name your emotion out loud before reacting",
+        "Check in with a trusted friend twice a week",
+        "Practice 3 deep breaths before responding when triggered",
+        "Write a gratitude note before bed",
+        "Process one difficult feeling in your journal weekly",
+        "Forgive one grudge you've been holding this month",
+        "Celebrate one small win daily"
+      ]
+    },
+    physical: {
+      section: "Branch", label: "Physical", accent: "#3FA66C",
+      tagline: "Caring for the body that carries everything else.",
+      habits: [
+        "Drink 8 glasses of water daily",
+        "Move your body for 20 minutes daily",
+        "Sleep by 11pm at least 5 nights a week",
+        "Prepare one home-cooked meal daily",
+        "Stretch for 5 minutes every morning",
+        "Take the stairs instead of the elevator this month",
+        "Get 10 minutes of sunlight daily"
+      ]
+    },
+    financial: {
+      section: "Branch", label: "Financial", accent: "#25517E",
+      tagline: "Building discipline, awareness, and margin with money.",
+      habits: [
+        "Track every expense for 7 days straight",
+        "Save 10% of any income received immediately",
+        "Review your budget every Friday",
+        "Avoid one impulse purchase this week",
+        "Learn one financial concept weekly",
+        "Set one 6-month savings goal and track progress",
+        "Pay one bill a day early instead of at deadline"
+      ]
+    },
+    relational: {
+      section: "Branch", label: "Relational", accent: "#C79A4B",
+      tagline: "Investing in the people around you with intention.",
+      habits: [
+        "Reach out to one person you've neglected weekly",
+        "Give one specific compliment daily",
+        "Have one phone-free conversation daily",
+        "Resolve one unspoken tension this month",
+        "Serve someone without being asked weekly",
+        "Check in on a Genesis Circle member weekly",
+        "Write a thank-you note to someone monthly"
+      ]
+    }
+  };
+
+  const $ = (sel) => document.querySelector(sel);
+  const heroEl = $("#hero"), pickerEl = $("#picker"), mainEl = $("#main");
+  let currentPillarId = null;
+  let habits = []; // [{id, text, done}]
+  let uidCounter = 1;
+
+  function uid(){ return "h" + (uidCounter++); }
+  function storageKey(id){ return "argon-growth-plan:" + id; }
+
+  function getPillarFromURL(){
+    const p = new URLSearchParams(window.location.search).get("pillar");
+    return (p && PILLARS[p]) ? p : null;
+  }
+
+  function buildPicker(){
+    const grid = $("#pickerGrid");
+    grid.innerHTML = "";
+    Object.entries(PILLARS).forEach(([id, p]) => {
+      const btn = document.createElement("button");
+      btn.className = "picker-card";
+      btn.innerHTML = `<div class="pc-section">${p.section}</div><div class="pc-label display">${p.label}</div>`;
+      btn.style.borderTopColor = p.accent;
+      btn.addEventListener("click", () => selectPillar(id));
+      grid.appendChild(btn);
+    });
+  }
+
+  function showPicker(){
+    heroEl.hidden = true; mainEl.hidden = true;
+    pickerEl.hidden = false;
+  }
+
+  function selectPillar(id){
+    currentPillarId = id;
+    const p = PILLARS[id];
+
+    const url = new URL(window.location);
+    url.searchParams.set("pillar", id);
+    window.history.replaceState({}, "", url);
+
+    $("#pillarSwatch").style.background = p.accent;
+    $("#pillarSection").textContent = p.section + " · " + p.label;
+    $("#pillarLabel").textContent = p.label;
+    $("#pillarTagline").textContent = p.tagline;
+    document.documentElement.style.setProperty("--green-500", p.accent);
+
+    pickerEl.hidden = true;
+    heroEl.hidden = false;
+    mainEl.hidden = false;
+
+    loadHabits(id);
+    renderHabits();
+  }
+
+  function loadHabits(id){
+    try{
+      const raw = localStorage.getItem(storageKey(id));
+      if(raw){
+        const parsed = JSON.parse(raw);
+        if(Array.isArray(parsed) && parsed.length){
+          habits = parsed;
+          return;
+        }
+      }
+    }catch(e){ /* corrupted or missing — fall through to defaults */ }
+    habits = PILLARS[id].habits.map(text => ({ id: uid(), text, done: false }));
+  }
+
+  function renderHabits(){
+    const stairs = $("#stairs");
+    stairs.innerHTML = "";
+    habits.forEach((h, i) => {
+      const li = document.createElement("li");
+      li.className = "step" + (h.done ? " done" : "");
+      li.dataset.index = Math.min(i, 6);
+      li.dataset.id = h.id;
+
+      const num = document.createElement("div");
+      num.className = "step-num";
+      num.textContent = i + 1;
+      num.title = "Mark as this week's focus";
+      num.addEventListener("click", () => {
+        h.done = !h.done;
+        renderHabits();
+      });
+
+      const text = document.createElement("div");
+      text.className = "step-text";
+      text.contentEditable = "true";
+      text.dataset.placeholder = "Describe this habit…";
+      text.textContent = h.text;
+      text.addEventListener("input", () => { h.text = text.textContent; });
+      text.addEventListener("blur", () => { h.text = text.textContent.trim(); });
+
+      const remove = document.createElement("button");
+      remove.className = "step-remove";
+      remove.innerHTML = "&times;";
+      remove.title = "Remove habit";
+      remove.addEventListener("click", () => {
+        habits = habits.filter(x => x.id !== h.id);
+        renderHabits();
+      });
+
+      li.appendChild(num);
+      li.appendChild(text);
+      li.appendChild(remove);
+      stairs.appendChild(li);
+    });
+  }
+
+  function addHabit(){
+    habits.push({ id: uid(), text: "", done: false });
+    renderHabits();
+    const editables = document.querySelectorAll(".step-text");
+    const last = editables[editables.length - 1];
+    if(last){ last.focus(); }
+  }
+
+  function savePlan(){
+    if(!currentPillarId) return;
+    const clean = habits.map(h => ({ ...h, text: h.text.trim() })).filter(h => h.text.length > 0);
+    habits = clean;
+    renderHabits();
+
+    const flash = $("#saveFlash");
+    try{
+      localStorage.setItem(storageKey(currentPillarId), JSON.stringify(habits));
+      flash.textContent = "✓ Saved";
+      flash.style.color = "var(--green-500)";
+    }catch(e){
+      flash.textContent = "Couldn't save — storage may be full or disabled";
+      flash.style.color = "#B9412E";
+    }
+    flash.classList.add("show");
+    setTimeout(() => flash.classList.remove("show"), 2200);
+  }
+
+  function resetPlan(){
+    if(!currentPillarId) return;
+    if(!confirm("Reset to the 7 default habits for this pillar? Your saved edits will be lost.")) return;
+    habits = PILLARS[currentPillarId].habits.map(text => ({ id: uid(), text, done: false }));
+    localStorage.removeItem(storageKey(currentPillarId));
+    renderHabits();
+  }
+
+  $("#addHabit").addEventListener("click", addHabit);
+  $("#savePlan").addEventListener("click", savePlan);
+  $("#resetPlan").addEventListener("click", resetPlan);
+  $("#changePillar").addEventListener("click", showPicker);
+  $("#retake").addEventListener("click", ()=>{window.location = '/'});
+
+  // listen for a pillar handed off via postMessage from the previous page
+  window.addEventListener("message", (e) => {
+    if(e.data && typeof e.data.pillar === "string" && PILLARS[e.data.pillar]){
+      selectPillar(e.data.pillar);
+    }
+  });
+
+  buildPicker();
+  const initial = getPillarFromURL();
+  if(initial){
+    selectPillar(initial);
+  }else{
+    showPicker();
+  }
+
+})();
+</script>
+</body>
+</html>

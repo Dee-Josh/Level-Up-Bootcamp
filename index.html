@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>LEVEL-UP Growth Plan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="header">
+            <!-- <div class="logo-mark"><img src="./img/logo.png" style="width: 80px; height: 80px; border-radius: 100%;" alt=""></div> -->
+            <div class="logo-mark"><img src="./img/boot-camp.png" style="width: 70px; height: 70px; border-radius: 100%;" alt=""></div>
+            <div class="brand"><b>THE LEVEL UP BOOTCAMP</b></div>
+            <h1>Your <span>Balanced Growth</span> Assessment</h1>
+            <p class="subtitle">
+                Answer honestly. This reveals where you are right now — and helps us place you in the right Growth Pod.
+            </p>
+        </div>
+
+        <div id="stepName">
+            <div class="divider">Let's Start</div>
+            <div class="form-group">
+            <label class="field-label">Full Name</label>
+            <input type="text" id="nameInput" placeholder="Enter your name"/>
+            </div>
+            <div class="form-group">
+            <label class="field-label">WhatsApp Number (optional)</label>
+            <input type="text" id="phoneInput" placeholder="+234..."/>
+            </div>
+            <div class="form-group">
+            <label class="field-label">password</label>
+            <input type="password" required id="password" placeholder="Enter personal password from pg 11">
+            </div>
+            <button class="btn-next" onclick="startAssessment()">Begin Assessment →</button>
+        </div>
+
+        <div id="stepAssessment" style="display: none;">
+            <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+            <div class="progress-label" id="progressLabel">Pillar 1 of 7</div>
+            <div id="pillarContent"></div>
+            <div class="nav-row">
+            <button class="btn-back" id="backBtn" onclick="prevPillar()">← Back</button>
+            <button class="btn-next" id="nextBtn" onclick="nextPillar()">Next →</button>
+            </div>
+        </div>
+
+        <div id="stepResults" style="display:none;" class="results-section">
+            <div class="divider">Your Results</div>
+            <div class="chart-wrap">
+            <div class="chart-title"><span id="display-name"><b>Your</b></span> Level-Up Tree Map</div>
+            <div class="chart-subtitle">A visual snapshot of your balanced growth</div>
+            <canvas id="radarCanvas"></canvas>
+            </div>
+            <div id="scoreGrid" class="score-grid"></div>
+            <div class="reveal-box" id="revealBox"></div>
+            <div class="pod-choice-title">Generate a growth plan;</div>
+            <p class="pod-choice-sub">
+                We recommend your weakest pillar — but you can choose any area you feel called to grow in.
+            </p>
+            <div class="pillars-grid" id="podGrid"></div>
+            <!-- <textarea
+             id="reasonInput" placeholder="Why this pod? Share what's been on your heart about this area... (optional)"
+            ></textarea> -->
+            <button class="submit-btn" id="submitBtn" onclick="generatePlan()">
+            <span id="btnText">Generate Growth Plan 🌿</span>
+            <div class="spinner" id="spinner"></div>
+            </button>
+            <div class="error-msg" id="errorMsg"></div>
+        </div>
+
+        <div class="success" id="successMsg">
+            <div class="success-icon">🌳</div>
+            <h2>You're in, Giant.</h2>
+            <p>Your growth plan has been generated.<br/>Stay accountable throughout the Level-Up Bootcamp.</p>
+            <div class="pod-badge" id="podBadge"></div>
+        </div>
+
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
+<div>
+
+    <!-- Step 2: Assessment -->
+    <div id="stepAssessment" style="display:none;">
+        <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">Pillar 1 of 7</div>
+        <div id="pillarContent"></div>
+        <div class="nav-row">
+        <button class="btn-back" id="backBtn" onclick="prevPillar()">← Back</button>
+        <button class="btn-next" id="nextBtn" onclick="nextPillar()">Next →</button>
+        </div>
+    </div>
+
+    <!-- Step 3: Results + Pod Choice -->
+    <div id="stepResults" style="display:none;" class="results-section">
+        <div class="divider">Your Results</div>
+        <div id="scoreGrid" class="score-grid"></div>
+        <div class="reveal-box" id="revealBox"></div>
+
+        <div class="pod-choice-title">Choose your Growth Pod</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5;">
+            We recommend your weakest pillar — but you can choose any area you feel called to grow in.
+        </p>
+        <div class="pillars-grid" id="podGrid"></div>
+
+        <textarea
+        id="reasonInput" placeholder="Why this pod? Share what's been on your heart about this area... (optional)"
+        ></textarea>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+        <span id="btnText">Join My Pod 🌿</span>
+        <div class="spinner" id="spinner"></div>
+        </button>
+        <div class="error-msg" id="errorMsg"></div>
+    </div>
+
+    <!-- Success -->
+    <div class="success" id="successMsg">
+        <div class="success-icon">🌳</div>
+        <h2>You're in, Giant.</h2>
+        <p>Your pod choice has been recorded.<br/>Joshua will reach out with your group details soon.</p>
+        <div class="pod-badge" id="podBadge"></div>
+    </div>
+
+</div>
+
