@@ -3,6 +3,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySA8sH1o7E1dXN0ZiQf
 
 const registeredPassword = [
     "Genesis",
+    "Daniel234",
     "Favour01",
     "Oladele",
     "Ayodamola04",
