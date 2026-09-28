@@ -138,30 +138,37 @@ let enteredName;
 
 function startAssessment() {
     enteredName = document.getElementById('nameInput').value;
-    let enteredPassword = document.getElementById('password').value;
+    // let enteredPassword = document.getElementById('password').value;
     let displayName = document.getElementById('display-name');
     displayName.textContent = enteredName+"'s";
 
     if (!document.getElementById('nameInput').value.trim()) { 
         alert('Please enter your name.'); 
-    }else if (enteredPassword === "") {
-        alert('Please enter your password.');
+    }else {
+        document.getElementById('stepName').style.display = 'none';
+        document.getElementById('stepAssessment').style.display = 'block';
+        renderPillar();
+        // break;
     }
-    else {
-        for (let index = 0; index < registeredPassword.length; index++) {
-            if (enteredPassword === registeredPassword[index]){
-                document.getElementById('stepName').style.display = 'none';
-                document.getElementById('stepAssessment').style.display = 'block';
-                renderPillar();
-                break;
-            }else{
-                if(index+1 === registeredPassword.length) {
-                    alert("Password not found");
-                    break;
-                }
-            }   
-        }
-    }
+    
+    // else if (enteredPassword === "") {
+    //     alert('Please enter your password.');
+    // }
+    // else {
+    //     for (let index = 0; index < registeredPassword.length; index++) {
+    //         if (enteredPassword === registeredPassword[index]){
+    //             document.getElementById('stepName').style.display = 'none';
+    //             document.getElementById('stepAssessment').style.display = 'block';
+    //             renderPillar();
+    //             break;
+    //         }else{
+    //             if(index+1 === registeredPassword.length) {
+    //                 alert("Password not found");
+    //                 break;
+    //             }
+    //         }   
+    //     }
+    // }
 
     
     // registeredPassword.forEach((password, index)=>{
