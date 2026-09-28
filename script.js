@@ -135,9 +135,11 @@ let currentPillar = 0;
 let scores = {};
 
 let enteredName;
+let enteredNumber;
 
 function startAssessment() {
     enteredName = document.getElementById('nameInput').value;
+    enteredNumber = document.getElementById('phoneInput').value;
     // let enteredPassword = document.getElementById('password').value;
     let displayName = document.getElementById('display-name');
     displayName.textContent = enteredName+"'s";
@@ -358,13 +360,35 @@ document.getElementById('podGrid').innerHTML = PILLARS.map(p => {
 
 // GENERATE PLAN
 
-function generatePlan() {
-const pod = document.querySelector('input[name="pod"]:checked').value;
-setLoading(true); hideError();
-setTimeout(() => {
-    window.location =  'argon-growth-plan.html?pillar='+pod
-    setLoading(false)
-}, 1500);
+async function generatePlan() {
+    const pod = document.querySelector('input[name="pod"]:checked').value;
+    const name = enteredName;
+    const phone = enteredNumber
+    const reason = ""
+    setLoading(true); hideError();
+    // setTimeout(() => {
+    //     window.location =  'argon-growth-plan.html?pillar='+pod
+    //     setLoading(false)
+    // }, 1500);
+
+    const weakest = PILLARS.reduce((a,b) => scores[a.id].pct < scores[b.id].pct ? a : b);
+    const payload = {
+        timestamp: new Date().toLocaleString(),
+        name, phone,
+        // pillar: PILLARS.find(p=>p.id===pod.value).name,
+        weakestPillar: weakest.name,
+        scores: PILLARS.map(p=>`${p.name}: ${scores[p.id].pct}%`).join(' | '),
+        reason
+    };
+
+    try {
+        await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        // showSuccess(pod.value);
+        window.location =  'argon-growth-plan.html?pillar='+pod
+    } catch(err) {
+        setLoading(false);
+        showError('Something went wrong. Please check your connection and try again.');
+    }
 
 
 }
